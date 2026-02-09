@@ -1,0 +1,36 @@
+{
+  ament-cmake,
+  ament-cmake-gtest,
+  buildAmentCmakePackage,
+  can-msgs,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rclcpp,
+  rosSystemPackages,
+  substituteSource,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "dataspeed_can_msg_filters";
+  version = "2.0.6-1";
+  src = finalAttrs.passthru.sources."dataspeed_can_msg_filters";
+  nativeBuildInputs = [ ament-cmake ];
+  propagatedNativeBuildInputs = [ can-msgs rclcpp ];
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ can-msgs rclcpp ];
+  checkInputs = [ ament-cmake-gtest ];
+  passthru.sources = mkSourceSet (sources: {
+    "dataspeed_can_msg_filters" = substituteSource {
+      src = fetchgit {
+        name = "dataspeed_can_msg_filters-source";
+        url = "https://github.com/DataspeedInc-release/dataspeed_can-release.git";
+        rev = "49919bdea52a7f783ede96a371284cd0a7056a2a";
+        hash = "sha256-NZ7hmo13d9Y3oIZKVNx1mvNR1t2xlig7085/Lr2k+HI=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    Time synchronize multiple CAN messages to get a single callback\n  ";
+  };
+})

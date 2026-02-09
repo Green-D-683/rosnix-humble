@@ -1,0 +1,39 @@
+{
+  ament-cmake,
+  ament-lint-auto,
+  ament-lint-common,
+  buildAmentCmakePackage,
+  builtin-interfaces,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rosSystemPackages,
+  rosidl-default-generators,
+  rosidl-default-runtime,
+  std-msgs,
+  substituteSource,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "flir_camera_msgs";
+  version = "3.0.4-1";
+  src = finalAttrs.passthru.sources."flir_camera_msgs";
+  nativeBuildInputs = [ ament-cmake ];
+  propagatedNativeBuildInputs = [ builtin-interfaces rosidl-default-generators rosidl-default-runtime std-msgs ];
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ builtin-interfaces rosidl-default-generators rosidl-default-runtime std-msgs ];
+  checkInputs = [ ament-lint-auto ament-lint-common ];
+  passthru.sources = mkSourceSet (sources: {
+    "flir_camera_msgs" = substituteSource {
+      src = fetchgit {
+        name = "flir_camera_msgs-source";
+        url = "https://github.com/ros-drivers-gbp/flir_camera_driver-release.git";
+        rev = "ec6c467bfee393b5f3b0778f7e014b4e0a5eb88a";
+        hash = "sha256-eyROPCacIut3kAK/WWPWqV5joMM26saSJUddZwk1+mI=";
+      };
+    };
+  });
+  meta = {
+    description = "messages related to flir camera driver";
+  };
+})

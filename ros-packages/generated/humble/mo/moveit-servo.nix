@@ -1,0 +1,61 @@
+{
+  ament-cmake,
+  ament-cmake-gtest,
+  ament-lint-auto,
+  ament-lint-common,
+  buildAmentCmakePackage,
+  control-msgs,
+  control-toolbox,
+  controller-manager,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  geometry-msgs,
+  gripper-controllers,
+  joint-state-broadcaster,
+  joint-trajectory-controller,
+  joy,
+  launch-param-builder,
+  mkSourceSet,
+  moveit-common,
+  moveit-configs-utils,
+  moveit-core,
+  moveit-msgs,
+  moveit-resources-panda-moveit-config,
+  moveit-ros-planning-interface,
+  pluginlib,
+  robot-state-publisher,
+  ros-testing,
+  rosSystemPackages,
+  sensor-msgs,
+  std-msgs,
+  std-srvs,
+  substituteSource,
+  tf2-eigen,
+  tf2-ros,
+  trajectory-msgs,
+  wrapRosQtAppsHook,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "moveit_servo";
+  version = "2.5.9-1";
+  src = finalAttrs.passthru.sources."moveit_servo";
+  nativeBuildInputs = [ ament-cmake wrapRosQtAppsHook ];
+  propagatedNativeBuildInputs = [ control-msgs control-toolbox geometry-msgs gripper-controllers joint-state-broadcaster joint-trajectory-controller joy launch-param-builder moveit-common moveit-configs-utils moveit-core moveit-msgs moveit-ros-planning-interface pluginlib robot-state-publisher sensor-msgs std-msgs std-srvs tf2-eigen tf2-ros trajectory-msgs ];
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ control-msgs control-toolbox geometry-msgs gripper-controllers joint-state-broadcaster joint-trajectory-controller joy launch-param-builder moveit-common moveit-configs-utils moveit-core moveit-msgs moveit-ros-planning-interface pluginlib robot-state-publisher sensor-msgs std-msgs std-srvs tf2-eigen tf2-ros trajectory-msgs ];
+  checkInputs = [ ament-cmake-gtest ament-lint-auto ament-lint-common controller-manager moveit-resources-panda-moveit-config ros-testing ];
+  passthru.sources = mkSourceSet (sources: {
+    "moveit_servo" = substituteSource {
+      src = fetchgit {
+        name = "moveit_servo-source";
+        url = "https://github.com/ros2-gbp/moveit2-release.git";
+        rev = "0c61ccad598821e2aa06888e36f0db24a9e8f7f7";
+        hash = "sha256-pRBGk5KDeyvYncPKAq9iCQghvvO8sdxueq8iO+4wqk4=";
+      };
+    };
+  });
+  meta = {
+    description = "Provides real-time manipulator Cartesian and joint servoing.";
+  };
+})

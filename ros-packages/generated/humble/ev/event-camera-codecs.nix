@@ -1,0 +1,44 @@
+{
+  ament-cmake,
+  ament-cmake-auto,
+  ament-cmake-clang-format,
+  ament-cmake-gtest,
+  ament-cmake-ros,
+  ament-lint-auto,
+  ament-lint-common,
+  buildAmentCmakePackage,
+  class-loader,
+  event-camera-msgs,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rclcpp,
+  ros-environment,
+  rosSystemPackages,
+  rosbag2-cpp,
+  substituteSource,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "event_camera_codecs";
+  version = "3.0.0-1";
+  src = finalAttrs.passthru.sources."event_camera_codecs";
+  nativeBuildInputs = [ ament-cmake ament-cmake-auto ament-cmake-ros ];
+  propagatedNativeBuildInputs = [ class-loader event-camera-msgs ros-environment ];
+  buildInputs = [ ament-cmake ament-cmake-auto ament-cmake-ros ];
+  propagatedBuildInputs = [ class-loader event-camera-msgs ros-environment ];
+  checkInputs = [ ament-cmake-clang-format ament-cmake-gtest ament-lint-auto ament-lint-common rclcpp rosbag2-cpp ];
+  passthru.sources = mkSourceSet (sources: {
+    "event_camera_codecs" = substituteSource {
+      src = fetchgit {
+        name = "event_camera_codecs-source";
+        url = "https://github.com/ros2-gbp/event_camera_codecs-release.git";
+        rev = "5b35062c0ec72c6bd1269b5dea5e95d1c33d1c20";
+        hash = "sha256-z1vnNnC2NRvjzTo0dUoDQ56X8Cpf50fK/WgiV+vKUKE=";
+      };
+    };
+  });
+  meta = {
+    description = "package to encode and decode event_camera_msgs";
+  };
+})

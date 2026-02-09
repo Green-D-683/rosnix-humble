@@ -1,0 +1,46 @@
+{
+  buildCmakePackage,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rosSystemPackages,
+  substituteSource,
+}:
+buildCmakePackage (finalAttrs: {
+  pname = "sophus";
+  version = "1.22.9102-2";
+  src = finalAttrs.passthru.sources."sophus";
+  nativeBuildInputs = rosSystemPackages.getPackages { forNativeBuildInputs = [ "cmake" ]; };
+  propagatedNativeBuildInputs = rosSystemPackages.getPackages { forNativeBuildInputs = [ "eigen" "fmt" "libceres-dev" ]; };
+  buildInputs = rosSystemPackages.getPackages { forBuildInputs = [ "cmake" ]; };
+  propagatedBuildInputs = rosSystemPackages.getPackages { forBuildInputs = [ "eigen" "fmt" "libceres-dev" ]; };
+  passthru.sources = mkSourceSet (sources: {
+    "sophus" = substituteSource {
+      src = fetchgit {
+        name = "sophus-source";
+        url = "https://github.com/ros2-gbp/sophus-release.git";
+        rev = "ff76a1cf8b7ec1815e549c2beff1d8b3ea0e62b4";
+        hash = "sha256-xTS2ysDs9SSKpvKrxnhooJVtfpwRvYCuMpbFc4skbDM=";
+      };
+      substitutions = [
+        {
+          path = "CMakeLists.txt";
+          from = "GIT_REPOSITORY https://github.com/pybind/pybind11.git";
+          to = "URL ${sources."sophus/pybind11"}";
+        }
+      ];
+    };
+    "sophus/pybind11" = substituteSource {
+      src = fetchgit {
+        name = "pybind11-source";
+        url = "https://github.com/pybind/pybind11.git";
+        rev = "5f2c678916ce2890e51333e0b684eb443e8848ed";
+        hash = "sha256-CuLoiLKNtzD6aiYlUxU9+lr4aiNcmRXA132+c5OMSJs=";
+      };
+    };
+  });
+  meta = {
+    description = "\n   C++ implementation of Lie Groups using Eigen.\n  ";
+  };
+})

@@ -1,0 +1,32 @@
+{
+  buildCmakePackage,
+  cv-bridge,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rosSystemPackages,
+  substituteSource,
+}:
+buildCmakePackage (finalAttrs: {
+  pname = "ifm3d_core";
+  version = "0.18.0-7";
+  src = finalAttrs.passthru.sources."ifm3d_core";
+  nativeBuildInputs = rosSystemPackages.getPackages { forNativeBuildInputs = [ "cmake" ]; };
+  propagatedNativeBuildInputs = [ cv-bridge ] ++ rosSystemPackages.getPackages { forNativeBuildInputs = [ "boost" "curl" "libgoogle-glog-dev" "libpcl-all-dev" "libxmlrpc-c++" ]; };
+  buildInputs = rosSystemPackages.getPackages { forBuildInputs = [ "cmake" ]; };
+  propagatedBuildInputs = [ cv-bridge ] ++ rosSystemPackages.getPackages { forBuildInputs = [ "boost" "curl" "libgoogle-glog-dev" "libpcl-all-dev" "libxmlrpc-c++" ]; };
+  passthru.sources = mkSourceSet (sources: {
+    "ifm3d_core" = substituteSource {
+      src = fetchgit {
+        name = "ifm3d_core-source";
+        url = "https://github.com/ros2-gbp/ifm3d-release.git";
+        rev = "34d2f5d56f7a23db780d75b53c7133cd68e5a313";
+        hash = "sha256-uR93fGa2he8/x1p8bZM2xobrFhbm7cnUGAw341qYlOE=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    Library and Utilities for working with ifm pmd-based 3D ToF Cameras\n  ";
+  };
+})

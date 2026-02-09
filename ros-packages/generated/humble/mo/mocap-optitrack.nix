@@ -1,0 +1,39 @@
+{
+  ament-cmake,
+  ament-lint-auto,
+  ament-lint-common,
+  buildAmentCmakePackage,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  geometry-msgs,
+  mkSourceSet,
+  nav-msgs,
+  rclcpp,
+  rosSystemPackages,
+  substituteSource,
+  tf2-ros,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "mocap_optitrack";
+  version = "1.0.1-1";
+  src = finalAttrs.passthru.sources."mocap_optitrack";
+  nativeBuildInputs = [ ament-cmake ];
+  propagatedNativeBuildInputs = [ geometry-msgs nav-msgs rclcpp tf2-ros ];
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ geometry-msgs nav-msgs rclcpp tf2-ros ];
+  checkInputs = [ ament-lint-auto ament-lint-common ];
+  passthru.sources = mkSourceSet (sources: {
+    "mocap_optitrack" = substituteSource {
+      src = fetchgit {
+        name = "mocap_optitrack-source";
+        url = "https://github.com/ros2-gbp/mocap_optitrack-release.git";
+        rev = "8d2a36dc5e58aa0add327ea15b19ff88b22c3f9a";
+        hash = "sha256-fk3NfvBbRWBtnnmI+sh6C4WY46e2pxod/iJaWoVcRjs=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    Streaming of OptiTrack mocap data to tf\n    ";
+  };
+})

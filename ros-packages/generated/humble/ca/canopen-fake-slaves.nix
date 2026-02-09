@@ -1,0 +1,38 @@
+{
+  ament-cmake,
+  ament-lint-auto,
+  buildAmentCmakePackage,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  lely-core-libraries,
+  lifecycle-msgs,
+  mkSourceSet,
+  rclcpp,
+  rclcpp-lifecycle,
+  rosSystemPackages,
+  substituteSource,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "canopen_fake_slaves";
+  version = "0.2.13-1";
+  src = finalAttrs.passthru.sources."canopen_fake_slaves";
+  nativeBuildInputs = [ ament-cmake ];
+  propagatedNativeBuildInputs = [ lely-core-libraries lifecycle-msgs rclcpp rclcpp-lifecycle ];
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ lely-core-libraries lifecycle-msgs rclcpp rclcpp-lifecycle ];
+  checkInputs = [ ament-lint-auto ];
+  passthru.sources = mkSourceSet (sources: {
+    "canopen_fake_slaves" = substituteSource {
+      src = fetchgit {
+        name = "canopen_fake_slaves-source";
+        url = "https://github.com/ros2-gbp/ros2_canopen-release.git";
+        rev = "4416b76cc523863a911d1bad4dc7aff7a2c91850";
+        hash = "sha256-5NKz/MjMCtxujkk5WoGkEe/oz3Cry9LMHqEtlJobQOg=";
+      };
+    };
+  });
+  meta = {
+    description = "Package with mock canopen slave";
+  };
+})

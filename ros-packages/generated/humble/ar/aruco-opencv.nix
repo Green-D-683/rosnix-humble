@@ -1,0 +1,47 @@
+{
+  ament-cmake,
+  ament-cmake-copyright,
+  ament-cmake-cpplint,
+  ament-cmake-lint-cmake,
+  ament-cmake-uncrustify,
+  ament-cmake-xmllint,
+  ament-lint-auto,
+  aruco-opencv-msgs,
+  buildAmentCmakePackage,
+  cv-bridge,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  image-transport,
+  mkSourceSet,
+  rclcpp,
+  rclcpp-components,
+  rclcpp-lifecycle,
+  rosSystemPackages,
+  substituteSource,
+  tf2-geometry-msgs,
+  tf2-ros,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "aruco_opencv";
+  version = "2.4.1-1";
+  src = finalAttrs.passthru.sources."aruco_opencv";
+  nativeBuildInputs = [ ament-cmake ];
+  propagatedNativeBuildInputs = [ aruco-opencv-msgs cv-bridge image-transport rclcpp rclcpp-components rclcpp-lifecycle tf2-geometry-msgs tf2-ros ] ++ rosSystemPackages.getPackages { forNativeBuildInputs = [ "python3-img2pdf" "python3-numpy" "python3-opencv" "yaml-cpp" ]; };
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ aruco-opencv-msgs cv-bridge image-transport rclcpp rclcpp-components rclcpp-lifecycle tf2-geometry-msgs tf2-ros ] ++ rosSystemPackages.getPackages { forBuildInputs = [ "python3-img2pdf" "python3-numpy" "python3-opencv" "yaml-cpp" ]; };
+  checkInputs = [ ament-cmake-copyright ament-cmake-cpplint ament-cmake-lint-cmake ament-cmake-uncrustify ament-cmake-xmllint ament-lint-auto ];
+  passthru.sources = mkSourceSet (sources: {
+    "aruco_opencv" = substituteSource {
+      src = fetchgit {
+        name = "aruco_opencv-source";
+        url = "https://github.com/ros2-gbp/aruco_opencv-release.git";
+        rev = "083c30d9533a8179de769ab4ce6d9e05287494d1";
+        hash = "sha256-VCbyLzBr1gmTg12nAWub1GiX6Rv/y9E2kvEXqM/qST4=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    ArUco marker detection using aruco module from OpenCV libraries.\n  ";
+  };
+})

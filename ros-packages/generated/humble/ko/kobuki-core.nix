@@ -1,0 +1,43 @@
+{
+  ament-cmake-ros,
+  buildAmentCmakePackage,
+  ecl-build,
+  ecl-command-line,
+  ecl-config,
+  ecl-console,
+  ecl-converters,
+  ecl-devices,
+  ecl-geometry,
+  ecl-mobile-robot,
+  ecl-sigslots,
+  ecl-threads,
+  ecl-time,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rosSystemPackages,
+  substituteSource,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "kobuki_core";
+  version = "1.4.1-1";
+  src = finalAttrs.passthru.sources."kobuki_core";
+  nativeBuildInputs = [ ament-cmake-ros ];
+  propagatedNativeBuildInputs = [ ecl-build ecl-command-line ecl-config ecl-console ecl-converters ecl-devices ecl-geometry ecl-mobile-robot ecl-sigslots ecl-threads ecl-time ];
+  buildInputs = [ ament-cmake-ros ];
+  propagatedBuildInputs = [ ecl-build ecl-command-line ecl-config ecl-console ecl-converters ecl-devices ecl-geometry ecl-mobile-robot ecl-sigslots ecl-threads ecl-time ];
+  passthru.sources = mkSourceSet (sources: {
+    "kobuki_core" = substituteSource {
+      src = fetchgit {
+        name = "kobuki_core-source";
+        url = "https://github.com/ros2-gbp/kobuki_core-release.git";
+        rev = "1472e4df37392766a692c93da72ff3072f11303c";
+        hash = "sha256-hdFNImUFyN9gWBu1eoANgjMWe3zFZFLry+JUJ5I0LB4=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    Pure C++ driver library for Kobuki.\n  ";
+  };
+})

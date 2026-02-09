@@ -1,0 +1,46 @@
+{
+  ament-cmake,
+  ament-lint-auto,
+  ament-lint-common,
+  buildAmentCmakePackage,
+  builtin-interfaces,
+  diagnostic-updater,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  laser-proc,
+  mkSourceSet,
+  rclcpp,
+  rclcpp-components,
+  rosSystemPackages,
+  rosidl-default-generators,
+  sensor-msgs,
+  std-srvs,
+  substituteSource,
+  urdf,
+  urg-c,
+  urg-node-msgs,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "urg_node";
+  version = "1.1.2-1";
+  src = finalAttrs.passthru.sources."urg_node";
+  nativeBuildInputs = [ ament-cmake ];
+  propagatedNativeBuildInputs = [ builtin-interfaces diagnostic-updater laser-proc rclcpp rclcpp-components rosidl-default-generators sensor-msgs std-srvs urdf urg-c urg-node-msgs ] ++ rosSystemPackages.getPackages { forNativeBuildInputs = [ "libboost-dev" ]; };
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ builtin-interfaces diagnostic-updater laser-proc rclcpp rclcpp-components rosidl-default-generators sensor-msgs std-srvs urdf urg-c urg-node-msgs ] ++ rosSystemPackages.getPackages { forBuildInputs = [ "libboost-dev" ]; };
+  checkInputs = [ ament-lint-auto ament-lint-common ];
+  passthru.sources = mkSourceSet (sources: {
+    "urg_node" = substituteSource {
+      src = fetchgit {
+        name = "urg_node-source";
+        url = "https://github.com/ros2-gbp/urg_node-release.git";
+        rev = "ebe0a6c5abaaf55601f6ad6027c50f3804ca6dcf";
+        hash = "sha256-rKRfH7J7bfdKpsw+O1lMqU39DFSNrZTKF6xKPphxOcU=";
+      };
+    };
+  });
+  meta = {
+    description = "urg_node";
+  };
+})

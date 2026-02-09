@@ -1,0 +1,63 @@
+{
+  ament-cmake,
+  ament-cmake-cppcheck,
+  ament-cmake-cpplint,
+  ament-cmake-gmock,
+  ament-cmake-gtest,
+  ament-cmake-lint-cmake,
+  ament-cmake-uncrustify,
+  ament-cmake-xmllint,
+  ament-index-cpp,
+  ament-lint-auto,
+  buildAmentCmakePackage,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  geometry-msgs,
+  ignition-math6-vendor,
+  image-transport,
+  interactive-markers,
+  laser-geometry,
+  map-msgs,
+  mkSourceSet,
+  nav-msgs,
+  pluginlib,
+  rclcpp,
+  resource-retriever,
+  rosSystemPackages,
+  rviz-common,
+  rviz-ogre-vendor,
+  rviz-rendering,
+  rviz-rendering-tests,
+  rviz-visual-testing-framework,
+  substituteSource,
+  tf2,
+  tf2-geometry-msgs,
+  tf2-ros,
+  urdf,
+  visualization-msgs,
+  wrapRosQtAppsHook,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "rviz_default_plugins";
+  version = "11.2.25-1";
+  src = finalAttrs.passthru.sources."rviz_default_plugins";
+  nativeBuildInputs = [ ament-cmake wrapRosQtAppsHook ];
+  propagatedNativeBuildInputs = [ geometry-msgs ignition-math6-vendor image-transport interactive-markers laser-geometry map-msgs nav-msgs pluginlib rclcpp resource-retriever rviz-common rviz-ogre-vendor rviz-rendering tf2 tf2-geometry-msgs tf2-ros urdf visualization-msgs ] ++ rosSystemPackages.getPackages { forNativeBuildInputs = [ "libqt5-core" "libqt5-gui" "libqt5-opengl" "libqt5-widgets" "qtbase5-dev" ]; };
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ geometry-msgs ignition-math6-vendor image-transport interactive-markers laser-geometry map-msgs nav-msgs pluginlib rclcpp resource-retriever rviz-common rviz-ogre-vendor rviz-rendering tf2 tf2-geometry-msgs tf2-ros urdf visualization-msgs ] ++ rosSystemPackages.getPackages { forBuildInputs = [ "libqt5-core" "libqt5-gui" "libqt5-opengl" "libqt5-widgets" "qtbase5-dev" ]; };
+  checkInputs = [ ament-cmake-cppcheck ament-cmake-cpplint ament-cmake-gmock ament-cmake-gtest ament-cmake-lint-cmake ament-cmake-uncrustify ament-cmake-xmllint ament-index-cpp ament-lint-auto rviz-rendering-tests rviz-visual-testing-framework ];
+  passthru.sources = mkSourceSet (sources: {
+    "rviz_default_plugins" = substituteSource {
+      src = fetchgit {
+        name = "rviz_default_plugins-source";
+        url = "https://github.com/ros2-gbp/rviz-release.git";
+        rev = "df660e3d3e09862f1d97e659595cb007353a8285";
+        hash = "sha256-8L0fGsdivFbaUWMXRb9ub6D1RkvZKzH400KAy1Ju1oI=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    Several default plugins for rviz to cover the basic functionality.\n  ";
+  };
+})

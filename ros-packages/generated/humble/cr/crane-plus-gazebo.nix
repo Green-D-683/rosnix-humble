@@ -1,0 +1,43 @@
+{
+  ament-cmake,
+  ament-lint-auto,
+  ament-lint-common,
+  buildAmentCmakePackage,
+  controller-manager,
+  crane-plus-description,
+  crane-plus-moveit-config,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  gripper-controllers,
+  mkSourceSet,
+  robot-state-publisher,
+  ros-gz,
+  ros2-controllers,
+  rosSystemPackages,
+  substituteSource,
+  wrapRosQtAppsHook,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "crane_plus_gazebo";
+  version = "2.0.1-1";
+  src = finalAttrs.passthru.sources."crane_plus_gazebo";
+  nativeBuildInputs = [ ament-cmake wrapRosQtAppsHook ];
+  propagatedNativeBuildInputs = [ controller-manager crane-plus-description crane-plus-moveit-config gripper-controllers robot-state-publisher ros2-controllers ros-gz ];
+  buildInputs = [ ament-cmake ];
+  propagatedBuildInputs = [ controller-manager crane-plus-description crane-plus-moveit-config gripper-controllers robot-state-publisher ros2-controllers ros-gz ];
+  checkInputs = [ ament-lint-auto ament-lint-common ];
+  passthru.sources = mkSourceSet (sources: {
+    "crane_plus_gazebo" = substituteSource {
+      src = fetchgit {
+        name = "crane_plus_gazebo-source";
+        url = "https://github.com/ros2-gbp/crane_plus-release.git";
+        rev = "72c902c72ce03e1943f99e3217a6050bbb1e4350";
+        hash = "sha256-bAz551exBXPDLwIPMMnL8cz8qkYxgBpgiZSw6HURCEk=";
+      };
+    };
+  });
+  meta = {
+    description = "CRANE+ V2 gazebo simulation package";
+  };
+})

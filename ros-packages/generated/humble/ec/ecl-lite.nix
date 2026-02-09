@@ -1,0 +1,38 @@
+{
+  ament-cmake-ros,
+  buildAmentCmakePackage,
+  ecl-config,
+  ecl-converters-lite,
+  ecl-errors,
+  ecl-io,
+  ecl-sigslots-lite,
+  ecl-time-lite,
+  fetchgit,
+  fetchurl,
+  fetchzip,
+  mkSourceSet,
+  rosSystemPackages,
+  substituteSource,
+}:
+buildAmentCmakePackage (finalAttrs: {
+  pname = "ecl_lite";
+  version = "1.2.0-1";
+  src = finalAttrs.passthru.sources."ecl_lite";
+  nativeBuildInputs = [ ament-cmake-ros ];
+  propagatedNativeBuildInputs = [ ecl-config ecl-converters-lite ecl-errors ecl-io ecl-sigslots-lite ecl-time-lite ];
+  buildInputs = [ ament-cmake-ros ];
+  propagatedBuildInputs = [ ecl-config ecl-converters-lite ecl-errors ecl-io ecl-sigslots-lite ecl-time-lite ];
+  passthru.sources = mkSourceSet (sources: {
+    "ecl_lite" = substituteSource {
+      src = fetchgit {
+        name = "ecl_lite-source";
+        url = "https://github.com/ros2-gbp/ecl_lite-release.git";
+        rev = "2ae5311596e4f2ae3d19b3941a5d83c0a6c97099";
+        hash = "sha256-pfGGGa3tTMW+9VEsHT0ofv7mnz478eGmJA10PjrEvJI=";
+      };
+    };
+  });
+  meta = {
+    description = "\n    Libraries and utilities for embedded and low-level linux development.\n  ";
+  };
+})
