@@ -11,6 +11,7 @@ let
         distro = "jazzy";
         rosPython =
           {
+            humble = final.python312;
             jazzy = final.python312;
             kilted = final.python312;
             rolling = final.python312;
