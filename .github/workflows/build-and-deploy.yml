@@ -26,7 +26,7 @@ jobs:
             substituters = https://cache.nixos.org https://rosnix.cachix.org
             trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= rosnix.cachix.org-1:FiqDDVzOzRB9i2Ai/sHxXkhRr71LRF/3i8QEjju70o8=
       - name: Build
-        run: nix run .#ci-build "${{ matrix.distro }}" --accept-flake-config
+        run: nix run .#ci-build "${{ matrix.distro }}" --accept-flake-config --show-trace
 
   deploy:
     needs: build
