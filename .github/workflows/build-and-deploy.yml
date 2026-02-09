@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         distro:
-          - jazzy
+          - humble
     runs-on: ubuntu-latest
     env:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
